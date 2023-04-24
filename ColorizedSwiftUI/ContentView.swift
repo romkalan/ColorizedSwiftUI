@@ -22,8 +22,9 @@ struct ContentView: View {
     @State private var redSliderTF = ""
     @State private var greenSliderTF = ""
     @State private var blueSliderTF = ""
+    @State private var alertPresented = false
     
-    @FocusState var focusedField: Field?
+    @FocusState private var focusedField: Field?
     
     var body: some View {
         ZStack {
@@ -34,10 +35,10 @@ struct ContentView: View {
                     green: convertValue(from: greenSliderValue),
                     blue: convertValue(from: blueSliderValue)
                 )
-                .frame(height: 150)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 5))
-                .padding(.bottom, 40)
+                    .frame(height: 150)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 5))
+                    .padding(.bottom, 40)
                 
                 colorChangerView(color: .red, value: $redSliderValue, valueTF: $redSliderTF)
                     .focused($focusedField, equals: .redSliderTF)
@@ -56,22 +57,10 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button("Done", action: {
-                        if focusedField == .redSliderTF {
-                            withAnimation {
-                                redSliderValue = Double(redSliderTF) ?? 0
-                            }
-                        } else if focusedField == .greenSliderTF {
-                            withAnimation {
-                                greenSliderValue = Double(greenSliderTF) ?? 0
-                            }
-                        } else {
-                            withAnimation {
-                                blueSliderValue = Double(blueSliderTF) ?? 0
-                            }
+                    Button("Done", action: changeSliderValue)
+                        .alert("Wrong format", isPresented: $alertPresented, actions: {}) {
+                            Text("Please enter correct value")
                         }
-                        dismissKeyboard()
-                    })
                 }
             }
             .padding()
@@ -83,6 +72,34 @@ struct ContentView: View {
                 from: nil,
                 for: nil
             )
+        }
+    }
+    
+    //MARK: - Private methods
+    private func changeSliderValue() {
+        if focusedField == .redSliderTF {
+            checkTextField(for: redSliderTF)
+            withAnimation {
+                redSliderValue = Double(redSliderTF) ?? 0
+            }
+        } else if focusedField == .greenSliderTF {
+            checkTextField(for: greenSliderTF)
+            withAnimation {
+                greenSliderValue = Double(greenSliderTF) ?? 0
+            }
+        } else {
+            checkTextField(for: blueSliderTF)
+            withAnimation {
+                blueSliderValue = Double(blueSliderTF) ?? 0
+            }
+        }
+        dismissKeyboard()
+    }
+    
+    private func checkTextField(for value: String) {
+            if value.isEmpty || !(0...255).contains(Double(value) ?? 0) {
+                alertPresented.toggle()
+                return
         }
     }
     
@@ -107,7 +124,6 @@ struct colorChangerView: View {
     
     @Binding var value: Double
     @Binding var valueTF: String
-    
     
     var body: some View {
         
