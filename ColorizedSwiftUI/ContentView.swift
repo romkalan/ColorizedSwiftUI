@@ -7,13 +7,23 @@
 
 import SwiftUI
 
+enum Field: Hashable {
+    case redSliderTF
+    case greenSliderTF
+    case blueSliderTF
+}
+
 struct ContentView: View {
+    
     @State private var redSliderValue = Double.random(in: 0...255)
     @State private var greenSliderValue = Double.random(in: 0...255)
     @State private var blueSliderValue = Double.random(in: 0...255)
+    
     @State private var redSliderTF = ""
     @State private var greenSliderTF = ""
     @State private var blueSliderTF = ""
+    
+    @FocusState var focusedField: Field?
     
     var body: some View {
         ZStack {
@@ -24,47 +34,63 @@ struct ContentView: View {
                     green: convertValue(from: greenSliderValue),
                     blue: convertValue(from: blueSliderValue)
                 )
-                    .frame(height: 150)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 5))
-                    .padding(.bottom, 40)
-                HStack {
-                    Text("\(lround(redSliderValue))")
-                        .frame(width: 35)
-                        .foregroundColor(.white)
-                    Slider(value: $redSliderValue, in: 0...255, step: 1)
-                        .accentColor(.red)
-                    TextField("\(lround(redSliderValue))", text: $redSliderTF)
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: 50)
-                }
-                HStack {
-                    Text("\(lround(greenSliderValue))")
-                        .frame(width: 35)
-                        .foregroundColor(.white)
-                    Slider(value: $greenSliderValue, in: 0...255, step: 1)
-                        .accentColor(.green)
-                    TextField("\(lround(greenSliderValue))", text: $greenSliderTF)
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: 50)
-                }
-                HStack {
-                    Text("\(lround(blueSliderValue))")
-                        .frame(width: 35)
-                        .foregroundColor(.white)
-                    Slider(value: $blueSliderValue, in: 0...255, step: 1)
-                        .accentColor(.blue)
-                    TextField("\(lround(blueSliderValue))", text: $blueSliderTF)
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: 50)
-                }
+                .frame(height: 150)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 5))
+                .padding(.bottom, 40)
+                
+                colorChangerView(color: .red, value: $redSliderValue, valueTF: $redSliderTF)
+                    .focused($focusedField, equals: .redSliderTF)
+                    .onSubmit { dismissKeyboard() }
+
+                colorChangerView(color: .green, value: $greenSliderValue, valueTF: $greenSliderTF)
+                    .focused($focusedField, equals: .greenSliderTF)
+                    .onSubmit { dismissKeyboard() }
+
+                colorChangerView(color: .blue, value: $blueSliderValue, valueTF: $blueSliderTF)
+                    .focused($focusedField, equals: .blueSliderTF)
+                    .onSubmit { dismissKeyboard() }
+                
                 Spacer()
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done", action: {
+                        if focusedField == .redSliderTF {
+                            withAnimation {
+                                redSliderValue = Double(redSliderTF) ?? 0
+                            }
+                        } else if focusedField == .greenSliderTF {
+                            withAnimation {
+                                greenSliderValue = Double(greenSliderTF) ?? 0
+                            }
+                        } else {
+                            withAnimation {
+                                blueSliderValue = Double(blueSliderTF) ?? 0
+                            }
+                        }
+                        dismissKeyboard()
+                    })
+                }
             }
             .padding()
         }
+        .onTapGesture {
+            UIApplication.shared.sendAction(
+                #selector(UIResponder.resignFirstResponder),
+                to: nil,
+                from: nil,
+                for: nil
+            )
+        }
     }
     
-    func convertValue(from value: Double) -> Double {
+    private func dismissKeyboard() {
+        focusedField = nil
+    }
+    
+    private func convertValue(from value: Double) -> Double {
         value / 255
     }
 }
@@ -72,5 +98,36 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+//MARK: - colorChangerView
+struct colorChangerView: View {
+    let color: Color
+    
+    @Binding var value: Double
+    @Binding var valueTF: String
+    
+    
+    var body: some View {
+        
+        HStack {
+            Text("\(lround(value))")
+                .frame(width: 35)
+                .foregroundColor(.white)
+            Slider(value: $value, in: 0...255, step: 1)
+                .accentColor(color)
+                .onChange(of: value) { newValue in
+                    valueTF = string(from: newValue)
+                }
+            TextField("\(lround(value))", text: $valueTF)
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 45)
+                .keyboardType(.decimalPad)
+        }
+    }
+    
+    func string(from value: Double) -> String {
+        String(format: "%.f", value)
     }
 }
