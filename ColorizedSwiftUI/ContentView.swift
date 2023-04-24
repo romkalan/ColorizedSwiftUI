@@ -30,15 +30,7 @@ struct ContentView: View {
         ZStack {
             Color.black.ignoresSafeArea()
             VStack(spacing: 10) {
-                Color(
-                    red: convertValue(from: redSliderValue),
-                    green: convertValue(from: greenSliderValue),
-                    blue: convertValue(from: blueSliderValue)
-                )
-                    .frame(height: 150)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 5))
-                    .padding(.bottom, 40)
+                canvas(redSliderValue: redSliderValue, greenSliderValue: greenSliderValue, blueSliderValue: blueSliderValue)
                 
                 colorChangerView(color: .red, value: $redSliderValue, valueTF: $redSliderTF)
                     .focused($focusedField, equals: .redSliderTF)
@@ -106,10 +98,6 @@ struct ContentView: View {
     private func dismissKeyboard() {
         focusedField = nil
     }
-    
-    private func convertValue(from value: Double) -> Double {
-        value / 255
-    }
 }
 
 struct ContentView_Previews: PreviewProvider {
@@ -143,7 +131,29 @@ struct colorChangerView: View {
         }
     }
     
-    func string(from value: Double) -> String {
+    private func string(from value: Double) -> String {
         String(format: "%.f", value)
+    }
+}
+
+struct canvas: View {
+    let redSliderValue: Double
+    let greenSliderValue: Double
+    let blueSliderValue: Double
+    
+    var body: some View {
+        Color(
+            red: convertValue(from: redSliderValue),
+            green: convertValue(from: greenSliderValue),
+            blue: convertValue(from: blueSliderValue)
+        )
+        .frame(height: 150)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 5))
+        .padding(.bottom, 40)
+    }
+    
+    private func convertValue(from value: Double) -> Double {
+        value / 255
     }
 }
