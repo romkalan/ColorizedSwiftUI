@@ -78,8 +78,8 @@ struct ContentView: View {
         focusedField = nil
     }
     
-    private func checkTextField(for value: String) {
-        if value.isEmpty || !(0...255).contains(Double(value) ?? 0) {
+    private func checkTextField(for inputText: String) {
+        guard let value = Double(inputText), (0...255).contains(value) else {
             alertPresented.toggle()
             return
         }
