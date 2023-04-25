@@ -123,6 +123,7 @@ struct colorChangerView: View {
     }
 }
 
+//MARK: - colorCanvasView
 struct canvas: View {
     let redSliderValue: Double
     let greenSliderValue: Double
@@ -145,6 +146,7 @@ struct canvas: View {
     }
 }
 
+//MARK: - UIApplication
 extension UIApplication {
     func endEditing() {
         sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
