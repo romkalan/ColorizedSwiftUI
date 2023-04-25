@@ -54,14 +54,7 @@ struct ContentView: View {
             }
             .padding()
         }
-        .onTapGesture {
-            UIApplication.shared.sendAction(
-                #selector(UIResponder.resignFirstResponder),
-                to: nil,
-                from: nil,
-                for: nil
-            )
-        }
+        .onTapGesture { UIApplication.shared.endEditing() }
     }
     
     //MARK: - Private methods
@@ -148,5 +141,11 @@ struct canvas: View {
     
     private func convertValue(from value: Double) -> Double {
         value / 255
+    }
+}
+
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
