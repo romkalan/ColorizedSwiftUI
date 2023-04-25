@@ -13,7 +13,6 @@ enum Field: Hashable {
     case blueSliderTF
 }
 
-
 struct ContentView: View {
     
     @State private var redSliderValue = Double.random(in: 0...255)
@@ -61,28 +60,29 @@ struct ContentView: View {
     //MARK: - Private methods
     private func changeSliderValue() {
         if focusedField == .redSliderTF {
-            checkTextField(for: redSliderTF)
-            withAnimation {
-                redSliderValue = Double(redSliderTF) ?? 0
-            }
+            checkValueOf(textField: &redSliderTF)
+            move(&redSliderValue, withValueOfTextField: redSliderTF)
         } else if focusedField == .greenSliderTF {
-            checkTextField(for: greenSliderTF)
-            withAnimation {
-                greenSliderValue = Double(greenSliderTF) ?? 0
-            }
+            checkValueOf(textField: &greenSliderTF)
+            move(&greenSliderValue, withValueOfTextField: greenSliderTF)
         } else {
-            checkTextField(for: blueSliderTF)
-            withAnimation {
-                blueSliderValue = Double(blueSliderTF) ?? 0
-            }
+            checkValueOf(textField: &blueSliderTF)
+            move(&blueSliderValue, withValueOfTextField: blueSliderTF)
         }
         focusedField = nil
     }
     
-    private func checkTextField(for inputText: String) {
-        guard let value = Double(inputText), (0...255).contains(value) else {
+    private func checkValueOf(textField: inout String) {
+        guard let value = Double(textField), (0...255).contains(value) else {
             alertPresented.toggle()
+            textField = ""
             return
+        }
+    }
+    
+    private func move(_ slider: inout Double, withValueOfTextField textField: String) {
+        withAnimation {
+            slider = Double(textField) ?? 0
         }
     }
 }
