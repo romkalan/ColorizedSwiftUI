@@ -32,13 +32,13 @@ struct ContentView: View {
             VStack(spacing: 10) {
                 canvas(redSliderValue: redSliderValue, greenSliderValue: greenSliderValue, blueSliderValue: blueSliderValue)
                 
-                colorChangerView(color: .red, value: $redSliderValue, valueTF: $redSliderTF)
+                colorChangerView( value: $redSliderValue, valueTF: $redSliderTF, color: .red)
                     .focused($focusedField, equals: .redSliderTF)
                 
-                colorChangerView(color: .green, value: $greenSliderValue, valueTF: $greenSliderTF)
+                colorChangerView(value: $greenSliderValue, valueTF: $greenSliderTF, color: .green)
                     .focused($focusedField, equals: .greenSliderTF)
                 
-                colorChangerView(color: .blue, value: $blueSliderValue, valueTF: $blueSliderTF)
+                colorChangerView(value: $blueSliderValue, valueTF: $blueSliderTF, color: .blue)
                     .focused($focusedField, equals: .blueSliderTF)
                 
                 Spacer()
@@ -95,10 +95,10 @@ struct ContentView_Previews: PreviewProvider {
 
 //MARK: - colorChangerView
 struct colorChangerView: View {
-    let color: Color
-    
+
     @Binding var value: Double
     @Binding var valueTF: String
+    let color: Color
     
     var body: some View {
         
