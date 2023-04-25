@@ -61,13 +61,13 @@ struct ContentView: View {
     private func changeSliderValue() {
         if focusedField == .redSliderTF {
             checkValueOf(textField: &redSliderTF)
-            move(&redSliderValue, withValueOfTextField: redSliderTF)
+            move(&redSliderValue, withValueOf: redSliderTF)
         } else if focusedField == .greenSliderTF {
             checkValueOf(textField: &greenSliderTF)
-            move(&greenSliderValue, withValueOfTextField: greenSliderTF)
+            move(&greenSliderValue, withValueOf: greenSliderTF)
         } else {
             checkValueOf(textField: &blueSliderTF)
-            move(&blueSliderValue, withValueOfTextField: blueSliderTF)
+            move(&blueSliderValue, withValueOf: blueSliderTF)
         }
         focusedField = nil
     }
@@ -80,7 +80,7 @@ struct ContentView: View {
         }
     }
     
-    private func move(_ slider: inout Double, withValueOfTextField textField: String) {
+    private func move(_ slider: inout Double, withValueOf textField: String) {
         withAnimation {
             slider = Double(textField) ?? 0
         }
