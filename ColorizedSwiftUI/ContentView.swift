@@ -13,6 +13,7 @@ enum Field: Hashable {
     case blueSliderTF
 }
 
+
 struct ContentView: View {
     
     @State private var redSliderValue = Double.random(in: 0...255)
