@@ -34,10 +34,10 @@ struct ContentView: View {
                 
                 colorChangerView(color: .red, value: $redSliderValue, valueTF: $redSliderTF)
                     .focused($focusedField, equals: .redSliderTF)
-
+                
                 colorChangerView(color: .green, value: $greenSliderValue, valueTF: $greenSliderTF)
                     .focused($focusedField, equals: .greenSliderTF)
-
+                
                 colorChangerView(color: .blue, value: $blueSliderValue, valueTF: $blueSliderTF)
                     .focused($focusedField, equals: .blueSliderTF)
                 
@@ -86,9 +86,9 @@ struct ContentView: View {
     }
     
     private func checkTextField(for value: String) {
-            if value.isEmpty || !(0...255).contains(Double(value) ?? 0) {
-                alertPresented.toggle()
-                return
+        if value.isEmpty || !(0...255).contains(Double(value) ?? 0) {
+            alertPresented.toggle()
+            return
         }
     }
 }
