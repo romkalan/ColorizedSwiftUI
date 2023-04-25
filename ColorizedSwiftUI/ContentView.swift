@@ -30,15 +30,15 @@ struct ContentView: View {
         ZStack {
             Color.black.ignoresSafeArea()
             VStack(spacing: 10) {
-                canvas(redSliderValue: redSliderValue, greenSliderValue: greenSliderValue, blueSliderValue: blueSliderValue)
+                CanvasView(redSliderValue: redSliderValue, greenSliderValue: greenSliderValue, blueSliderValue: blueSliderValue)
                 
-                colorChangerView( value: $redSliderValue, valueTF: $redSliderTF, color: .red)
+                ColorChangerView( value: $redSliderValue, valueTF: $redSliderTF, color: .red)
                     .focused($focusedField, equals: .redSliderTF)
                 
-                colorChangerView(value: $greenSliderValue, valueTF: $greenSliderTF, color: .green)
+                ColorChangerView(value: $greenSliderValue, valueTF: $greenSliderTF, color: .green)
                     .focused($focusedField, equals: .greenSliderTF)
                 
-                colorChangerView(value: $blueSliderValue, valueTF: $blueSliderTF, color: .blue)
+                ColorChangerView(value: $blueSliderValue, valueTF: $blueSliderTF, color: .blue)
                     .focused($focusedField, equals: .blueSliderTF)
                 
                 Spacer()
@@ -94,7 +94,7 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 //MARK: - colorChangerView
-struct colorChangerView: View {
+struct ColorChangerView: View {
 
     @Binding var value: Double
     @Binding var valueTF: String
@@ -120,29 +120,6 @@ struct colorChangerView: View {
     
     private func string(from value: Double) -> String {
         String(format: "%.f", value)
-    }
-}
-
-//MARK: - colorCanvasView
-struct canvas: View {
-    let redSliderValue: Double
-    let greenSliderValue: Double
-    let blueSliderValue: Double
-    
-    var body: some View {
-        Color(
-            red: convertValue(from: redSliderValue),
-            green: convertValue(from: greenSliderValue),
-            blue: convertValue(from: blueSliderValue)
-        )
-        .frame(height: 150)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 5))
-        .padding(.bottom, 40)
-    }
-    
-    private func convertValue(from value: Double) -> Double {
-        value / 255
     }
 }
 
