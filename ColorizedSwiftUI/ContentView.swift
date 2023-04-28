@@ -18,9 +18,7 @@ struct ContentView: View {
     @State private var redSliderValue = Double.random(in: 0...255).rounded()
     @State private var greenSliderValue = Double.random(in: 0...255).rounded()
     @State private var blueSliderValue = Double.random(in: 0...255).rounded()
-    
-    @State private var alertPresented = false
-    
+        
     @FocusState private var focusedField: Field?
     
     var body: some View {
@@ -51,11 +49,15 @@ struct ContentView: View {
             }
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
+                    Button(action: previousField) {
+                        Image(systemName: "chevron.up")
+                    }
+                    Button(action: nextField) {
+                        Image(systemName: "chevron.down")
+                    }
+                    
                     Spacer()
-                    Button("Done", action: changeSliderValue)
-                        .alert("Wrong format", isPresented: $alertPresented, actions: {}) {
-                            Text("Please enter correct value")
-                        }
+                    Button("Done", action: { focusedField = nil })
                 }
             }
             .padding()
@@ -63,21 +65,29 @@ struct ContentView: View {
     }
     
     //MARK: - Private methods
-    private func changeSliderValue() {
-        if focusedField == .redSliderTF {
-            check(text: redSliderValue.formatted())
-        } else if focusedField == .greenSliderTF {
-            check(text: greenSliderValue.formatted())
-        } else {
-            check(text: blueSliderValue.formatted())
+    private func nextField() {
+        switch focusedField {
+        case .redSliderTF:
+            focusedField = .greenSliderTF
+        case .greenSliderTF:
+            focusedField = .blueSliderTF
+        case .blueSliderTF:
+            focusedField = .redSliderTF
+        case .none:
+            focusedField = .none
         }
-        focusedField = nil
     }
     
-    private func check(text: String) {
-        guard let value = Double(text), (0...255).contains(value) else {
-            alertPresented.toggle()
-            return
+    private func previousField() {
+        switch focusedField {
+        case .redSliderTF:
+            focusedField = .blueSliderTF
+        case .greenSliderTF:
+            focusedField = .redSliderTF
+        case .blueSliderTF:
+            focusedField = .greenSliderTF
+        case .none:
+            focusedField = .none
         }
     }
 }
