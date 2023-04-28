@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum Field: Hashable {
+enum Field {
     case redSliderTF
     case greenSliderTF
     case blueSliderTF
