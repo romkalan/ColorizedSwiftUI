@@ -15,30 +15,36 @@ enum Field: Hashable {
 
 struct ContentView: View {
     
-    @State private var redSliderValue = Double.random(in: 0...255)
-    @State private var greenSliderValue = Double.random(in: 0...255)
-    @State private var blueSliderValue = Double.random(in: 0...255)
+    @State private var redSliderValue = Double.random(in: 0...255).rounded()
+    @State private var greenSliderValue = Double.random(in: 0...255).rounded()
+    @State private var blueSliderValue = Double.random(in: 0...255).rounded()
     
-    @State private var redSliderTF = ""
-    @State private var greenSliderTF = ""
-    @State private var blueSliderTF = ""
     @State private var alertPresented = false
     
     @FocusState private var focusedField: Field?
     
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            Color.black
+                .ignoresSafeArea()
+                .onTapGesture {
+                    focusedField = nil
+                }
             VStack(spacing: 10) {
-                CanvasView(redSliderValue: redSliderValue, greenSliderValue: greenSliderValue, blueSliderValue: blueSliderValue)
+                CanvasView(
+                    redSliderValue: redSliderValue,
+                    greenSliderValue: greenSliderValue,
+                    blueSliderValue: blueSliderValue
+                )
+                    .padding(.bottom, 40)
                 
-                ColorChangerView( value: $redSliderValue, valueTF: $redSliderTF, color: .red)
+                ColorSliderView(value: $redSliderValue, color: .red)
                     .focused($focusedField, equals: .redSliderTF)
                 
-                ColorChangerView(value: $greenSliderValue, valueTF: $greenSliderTF, color: .green)
+                ColorSliderView(value: $greenSliderValue, color: .green)
                     .focused($focusedField, equals: .greenSliderTF)
                 
-                ColorChangerView(value: $blueSliderValue, valueTF: $blueSliderTF, color: .blue)
+                ColorSliderView(value: $blueSliderValue, color: .blue)
                     .focused($focusedField, equals: .blueSliderTF)
                 
                 Spacer()
@@ -54,35 +60,24 @@ struct ContentView: View {
             }
             .padding()
         }
-        .onTapGesture { UIApplication.shared.endEditing() }
     }
     
     //MARK: - Private methods
     private func changeSliderValue() {
         if focusedField == .redSliderTF {
-            checkValueOf(textField: &redSliderTF)
-            move(&redSliderValue, withValueOf: redSliderTF)
+            check(text: redSliderValue.formatted())
         } else if focusedField == .greenSliderTF {
-            checkValueOf(textField: &greenSliderTF)
-            move(&greenSliderValue, withValueOf: greenSliderTF)
+            check(text: greenSliderValue.formatted())
         } else {
-            checkValueOf(textField: &blueSliderTF)
-            move(&blueSliderValue, withValueOf: blueSliderTF)
+            check(text: blueSliderValue.formatted())
         }
         focusedField = nil
     }
     
-    private func checkValueOf(textField: inout String) {
-        guard let value = Double(textField), (0...255).contains(value) else {
+    private func check(text: String) {
+        guard let value = Double(text), (0...255).contains(value) else {
             alertPresented.toggle()
-            textField = ""
             return
-        }
-    }
-    
-    private func move(_ slider: inout Double, withValueOf textField: String) {
-        withAnimation {
-            slider = Double(textField) ?? 0
         }
     }
 }
@@ -93,39 +88,3 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-//MARK: - colorChangerView
-struct ColorChangerView: View {
-
-    @Binding var value: Double
-    @Binding var valueTF: String
-    let color: Color
-    
-    var body: some View {
-        
-        HStack {
-            Text("\(lround(value))")
-                .frame(width: 35)
-                .foregroundColor(.white)
-            Slider(value: $value, in: 0...255, step: 1)
-                .accentColor(color)
-                .onChange(of: value) { newValue in
-                    valueTF = string(from: newValue)
-                }
-            TextField("\(lround(value))", text: $valueTF)
-                .textFieldStyle(.roundedBorder)
-                .frame(width: 45)
-                .keyboardType(.decimalPad)
-        }
-    }
-    
-    private func string(from value: Double) -> String {
-        String(format: "%.f", value)
-    }
-}
-
-//MARK: - UIApplication
-extension UIApplication {
-    func endEditing() {
-        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-}

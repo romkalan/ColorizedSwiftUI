@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD91DF9129FBF9DF00D505E3 /* ColorSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD91DF9029FBF9DF00D505E3 /* ColorSliderView.swift */; };
 		AD99398729F6622700210030 /* ColorizedSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD99398629F6622700210030 /* ColorizedSwiftUIApp.swift */; };
 		AD99398929F6622700210030 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD99398829F6622700210030 /* ContentView.swift */; };
 		AD99398B29F6622800210030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD99398A29F6622800210030 /* Assets.xcassets */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AD91DF9029FBF9DF00D505E3 /* ColorSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSliderView.swift; sourceTree = "<group>"; };
 		AD99398329F6622700210030 /* ColorizedSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColorizedSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD99398629F6622700210030 /* ColorizedSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorizedSwiftUIApp.swift; sourceTree = "<group>"; };
 		AD99398829F6622700210030 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 				AD99398629F6622700210030 /* ColorizedSwiftUIApp.swift */,
 				AD99398829F6622700210030 /* ContentView.swift */,
 				ADA42D5F29F7E0A000955978 /* CanvasView.swift */,
+				AD91DF9029FBF9DF00D505E3 /* ColorSliderView.swift */,
 				AD99398A29F6622800210030 /* Assets.xcassets */,
 				AD99398C29F6622800210030 /* Preview Content */,
 			);
@@ -141,6 +144,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD99398929F6622700210030 /* ContentView.swift in Sources */,
+				AD91DF9129FBF9DF00D505E3 /* ColorSliderView.swift in Sources */,
 				AD99398729F6622700210030 /* ColorizedSwiftUIApp.swift in Sources */,
 				ADA42D6029F7E0A000955978 /* CanvasView.swift in Sources */,
 			);

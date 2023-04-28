@@ -22,7 +22,6 @@ struct CanvasView: View {
         .frame(height: 150)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 5))
-        .padding(.bottom, 40)
     }
     
     private func convertValue(from value: Double) -> Double {
